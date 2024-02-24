@@ -19,12 +19,12 @@ FROM debian:buster-slim
 WORKDIR /usr/local/bin
 
 # Copie o aplicativo compilado do contêiner builder para o contêiner atual
-COPY --from=builder /app/target/release/rinha-de-backend-2024-q1 .
+COPY --from=builder /app/target/release/rinha .
 
 # Atualize os pacotes e instale o openssl
 RUN apt-get update && apt install -y openssl
 
 # Execute o aplicativo quando o contêiner for iniciado
-CMD ["./rinha-de-backend-2024-q1"]
+CMD ["./rinha"]
 
 
