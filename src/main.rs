@@ -41,7 +41,9 @@ pub enum TransactionType {
 }
 #[derive(Serialize, sqlx::FromRow)]
 pub struct Account {
+    #[serde(rename = "limite")]
     limit: i32,
+    #[serde(rename = "saldo")]
     balance: i32,
 }
 #[derive(Serialize)]
