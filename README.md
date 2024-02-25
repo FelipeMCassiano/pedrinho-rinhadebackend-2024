@@ -2,7 +2,7 @@
 
 ## Submissão para Rinha de Backend, Segunda Edição: 2024/Q1 - Controle de Concorrência
 
-pedrinho, carinhosamente apelidado pela minha avo, é uma versão feita em `rust` utlizando o web framework `axum`, `postgres` como database, para interface para a database a biblioteca
+pedrinho, carinhosamente apelidado pela minha avo, é uma versão feita em `rust` utlizando o web framework `axum`, `postgres` como database e para a sua interface a biblioteca
 `sqlx` e como load balancer o `nginx`
 
 ### Stack
