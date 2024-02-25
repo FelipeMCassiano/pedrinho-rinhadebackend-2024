@@ -69,12 +69,10 @@ type AppState = Arc<PostgresRepo>;
 
 #[tokio::main]
 async fn main() {
-    // build our application with a single route
     let url = env::var("DATABASE_URL").unwrap_or(String::from(
         "postgres://rinha:rinha@localhost:5432/rinha?sslmode=disable",
     ));
 
-    // let url = env::var("DATABASE_URL").unwrap_or(String::from("postgres://rinha:rinha@db:5432/rinha?sslmode=disable"));
     let repo = PostgresRepo::connect(url);
     let appstate = Arc::new(repo.await);
     let app = Router::new()
@@ -82,7 +80,6 @@ async fn main() {
         .route("/clientes/:id/transacoes", post(create_transaction))
         .with_state(appstate);
 
-    // run our app with hyper, listening globally on port 3000
     let listener = tokio::net::TcpListener::bind("0.0.0.0:3000").await.unwrap();
     axum::serve(listener, app).await.unwrap();
 }
@@ -122,7 +119,7 @@ async fn create_transaction(
     if !(1..=5).contains(&client_id) {
         return Err(Response::builder()
             .status(StatusCode::NOT_FOUND)
-            .body(Body::from(json!({"error": "client not foud"}).to_string()))
+            .body(Body::from(json!({"error": "client not found"}).to_string()))
             .unwrap());
     }
 
@@ -158,7 +155,7 @@ async fn create_transaction(
         Ok(None) => Err(Response::builder()
             .status(StatusCode::NOT_FOUND)
             .body(Body::from(
-                json!({"error": " clinet not foudn 2"}).to_string(),
+                json!({"error": " client not found "}).to_string(),
             ))
             .unwrap()),
         Err(e) => match e {
