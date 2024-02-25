@@ -25,12 +25,10 @@ impl PostgresRepo {
         cliente_id: &i32,
     ) -> Result<Option<Account>, Error> {
         let mut tx = self.pool.begin().await?;
-        println!("passei 1 tr");
         let queryresult = sqlx::query("SELECT limite,saldo FROM clientes WHERE id = $1 FOR UPDATE")
             .bind(cliente_id)
             .fetch_one(&mut *tx)
             .await?;
-        println!("passei 2 tr");
         let account = Account {
             limit: queryresult.try_get("limite")?,
             balance: queryresult.try_get("saldo")?,
@@ -58,7 +56,6 @@ impl PostgresRepo {
             )));
         }
 
-        println!("passei 3 tr");
         sqlx::query(
         "INSERT INTO transacoes (cliente_id, valor, tipo, descricao, realizada_em) VALUES($1, $2, $3, $4,$5)"
     ).bind(cliente_id).bind(t.valor).bind(t.tipo).bind(t.descricao).bind(t.realizada_em).execute(&mut *tx).await?;
@@ -73,13 +70,11 @@ impl PostgresRepo {
         .execute(&mut *tx)
         .await?;
 
-        println!("passei 4 tr");
         let a = Account {
             limit: account.limit,
             balance: newbalance,
         };
         tx.commit().await?;
-        println!(" tr");
 
         Ok(Some(a))
     }
@@ -99,7 +94,6 @@ impl PostgresRepo {
             saldo: account_s,
             last_transactions: Vec::new(),
         };
-        println!("passei 1 e");
         let queryresutl = query("SELECT valor, tipo, descricao, realizada_em FROM transacoes WHERE cliente_id=$1 ORDER BY realizada_em DESC LIMIT 10").bind(id).fetch_all(&self.pool).await;
         let mut vtransaction: Vec<TransactionDb> = Vec::new();
 
@@ -113,7 +107,6 @@ impl PostgresRepo {
                         realizada_em: r.try_get("realizada_em")?,
                     });
                 }
-                println!("passei 2 e");
                 bs.last_transactions.append(&mut vtransaction);
                 Ok(Some(bs))
                 

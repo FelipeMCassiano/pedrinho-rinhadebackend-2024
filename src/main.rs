@@ -53,7 +53,6 @@ pub struct TransactionDb {
     realizada_em: DateTime<Utc>,
     tipo: String
 }
-
 #[derive(Serialize)]
 pub struct BankStatement {
     #[serde(rename = "saldo")]
@@ -120,14 +119,12 @@ async fn create_transaction(
     Path(client_id): Path<i32>,
     Json(mut transaction): Json<Transaction>,
 ) -> impl IntoResponse {
-    println!("comecei a criar");
     if !(1..=5).contains(&client_id) {
         return Err(Response::builder()
             .status(StatusCode::NOT_FOUND)
             .body(Body::from(json!({"error": "client not foud"}).to_string()))
             .unwrap());
     }
-    println!("passei aq no handler");
 
     if transaction.descricao.is_empty() {
         return Err(Response::builder()
